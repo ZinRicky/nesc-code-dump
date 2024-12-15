@@ -1,7 +1,7 @@
 from apify_client import ApifyClient
 import os
 
-client = ApifyClient("apify_api_tfZRPfve7F2Fh67QP1cpkBzgXXqlaD1kkyMb")
+client = ApifyClient("apify_api_eaEbBDx14O0p3g0cixm67nx8l1l4PH2UXS6g")
 
 profiles = ['tradwifetori', 'ivyoutwest']
 
