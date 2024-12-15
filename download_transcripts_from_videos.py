@@ -14,5 +14,6 @@ for influencer in os.listdir('profiles'):
         if not os.path.exists(os.path.join('transcripts', f'{video['id']}.vtt')) and 'subtitleLinks' in video['videoMeta']:
             link = video['videoMeta']['subtitleLinks'][0]['downloadLink']
             temporary_file = os.path.join('transcripts', f'{video['id']}.vtt')
-            subprocess.run(['curl', '-o', temporary_file, '-A', user_agent, '-s', link])
+            subprocess.run(['curl', '-o', temporary_file,
+                           '-A', user_agent, '-s', link])
             time.sleep(random.random())
