@@ -8,7 +8,7 @@ if not os.path.isdir('./comments'):
     os.mkdir('./comments')
 
 i = 1 # TO BE CHANGED IF NEEDED
-df: pd.DataFrame = pd.read_csv(f'scrape{i}.csv')
+df: pd.DataFrame = pd.read_csv(os.path.join('polished_data', f'scrape{i}.csv'))
 
 client = ApifyClient("apify_api_eGtf6QOosLv0J87H2PX9sZaEXjpz6f4tyDqJ")
 
