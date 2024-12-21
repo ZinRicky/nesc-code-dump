@@ -7,9 +7,9 @@ from apify_client import ApifyClient
 if not os.path.isdir('./comments'):
     os.mkdir('./comments')
 
-i = 1  # TO BE CHANGED IF NEEDED
+i = 4  # TO BE CHANGED IF NEEDED
 df: pd.DataFrame = pd.read_csv(os.path.join('polished_data', f'scrape{i}.csv'))
-client = ApifyClient("apify_api_Z1uGROf31kp6Kju0yDx3c9cGQdZY4h4ddSon")
+client = ApifyClient("apify_api_eh7gsbnLJ9QP7cb3FyjfHI6qG1feg708aFvq")
 
 for video in tqdm.tqdm(df.sort_values('comments').itertuples(), total=df.shape[0]):
     if not os.path.isfile(os.path.join('comments', f'{video.id}.json')):
