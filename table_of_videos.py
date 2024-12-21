@@ -25,6 +25,7 @@ for influencer in tqdm.tqdm(os.listdir('./profiles')):
 
         data['views'].append(video['playCount'])
         data['likes'].append(video['diggCount'])
+        data['comments'].append(video['commentCount'])
 
         data['url'].append(video['webVideoUrl'])
         data['text'].append(video['text'])
