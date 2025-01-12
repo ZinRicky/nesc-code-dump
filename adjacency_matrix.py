@@ -8,7 +8,7 @@ from tqdm import tqdm
 import csv
 
 raw_nodes: set = set()
-edges = pd.read_csv(os.path.join('polished_data', 'complete_graph.csv'))
+edges = pd.read_csv(os.path.join('polished_data', 'comment_graph.csv'))
 
 print("Indexing source nodes.")
 for x in tqdm(edges.Source):
@@ -20,8 +20,10 @@ for x in tqdm(edges.Target):
 
 nodes: list = list(raw_nodes)
 nodes_number = len(nodes)
+print(f'{nodes_number=}')
 adjacency_matrix = coo_array((nodes_number, nodes_number), dtype=np.float32)
 
+print("Creating adjacency matrix")
 for edge in tqdm(edges.itertuples(), total=edges.shape[0]):
     x = edge.Source
     y = edge.Target
@@ -32,4 +34,4 @@ for edge in tqdm(edges.itertuples(), total=edges.shape[0]):
     adjacency_matrix += coo_array(([w], ([i], [j])),
                                   shape=(nodes_number, nodes_number), dtype=np.float32)
 
-save_npz(os.path.join('polished_data', 'adjacency_matrix.npz'), adjacency_matrix)
+save_npz(os.path.join('polished_data', 'comment_adjacency_matrix_unnormalised.npz'), adjacency_matrix)

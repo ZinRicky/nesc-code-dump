@@ -1,4 +1,5 @@
-polished_data/*.csv
+polished_data/*
+!polished_data/.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
