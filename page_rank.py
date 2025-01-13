@@ -27,7 +27,7 @@ M = damping * adjacency_matrix
 q = (1 - damping) * \
     np.ones((adjacency_matrix.shape[0],)) / adjacency_matrix.shape[0]
 
-print(f'{q=}')
+# print(f'{q=}')
 
 rng = np.random.default_rng()
 page_rank_vector = rng.random((adjacency_matrix.shape[0],))
@@ -40,6 +40,6 @@ while np.linalg.norm(page_rank_vector - page_rank_old, ord=1) > 1e-5 or not ente
     enter_in_cycle = True
     page_rank_old = page_rank_vector.copy()
     page_rank_vector = M @ page_rank_vector + q
-    print(f'{np.linalg.norm(page_rank_vector - page_rank_old, ord=1)=}')
+    # print(f'{np.linalg.norm(page_rank_vector - page_rank_old, ord=1)=}')
 
 np.save(os.path.join('polished_data', 'page_rank_vector.npy'), page_rank_vector)
