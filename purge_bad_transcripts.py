@@ -11,7 +11,8 @@ i = 0
 for transcript in os.listdir('./transcripts'):
     with open(os.path.join('transcripts', transcript), encoding='utf-8') as fp:
         # This is a bad hack, but it should work.
-        if '<HTML><HEAD>' in fp.readlines()[0]:
+        aaa = fp.readlines()[0]
+        if '<HTML><HEAD>' in aaa or '<html>' in aaa:
             to_be_deleted.append(transcript)
             i += 1
 

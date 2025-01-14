@@ -1,15 +1,16 @@
 from apify_client import ApifyClient
 import os
 
-client = ApifyClient("apify_api_U6cnlwWqnQDh8e9qvpuioDmaoQhu0i0RCKTu")
+client = ApifyClient("apify_api_cfEs0ENaG5BQvfUfTQX59eFl6EY2vr1BsgiL")
 
-profiles = ['zimcolorado']
+profiles = ['emergingmotherhood']
 
 for influencer in profiles:
     if f'{influencer}.json' not in os.listdir('./profiles'):
         run_input = {
             'profiles': [influencer],
             'oldestPostDate': '2024-01-01',
+            'newestPostDate': '2025-01-01',
             'resultsPerPage': 700,
         }
 

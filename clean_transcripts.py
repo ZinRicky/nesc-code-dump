@@ -34,7 +34,6 @@ for transcript in tqdm.tqdm(os.listdir('./transcripts')):
                     raise ValueError(f"Something with the subtitles {
                         transcript} is wrong")
             content = ' '.join(alt_content).replace('  ', ' ')
-
         finally:
             with open(os.path.join('clean_transcripts', transcript.split('.')[0] + '.txt'), 'w', encoding='utf-8') as fp:
                 fp.write(content)

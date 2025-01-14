@@ -47,6 +47,7 @@ unnormalised_adjacency_matrix = unnormalised_adjacency_matrix.tocsr()
 adjacency_matrix = spsp.coo_array(
     unnormalised_adjacency_matrix.shape, dtype=np.float32)
 
+print("Normalising adjacency matrix.")
 for i, x in tqdm(enumerate(unnormalised_adjacency_matrix.transpose()), total=unnormalised_adjacency_matrix.shape[0]):
     N = x.sum()
     if N:

@@ -28,7 +28,7 @@ def main():
 
     print("Removing NPCs.")
 
-    with Pool(processes=6) as p:
+    with Pool() as p:
         relevant = p.imap_unordered(f, list(source_nodes))
 
         good_source_nodes: set = set()
