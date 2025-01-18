@@ -12,8 +12,8 @@ i: int | None = None  # TO BE CHANGED IF NEEDED
 if i is None:
     df: pd.DataFrame = pd.read_csv(os.path.join('polished_data', f'videos_from_influencers.csv'))
 else:
-    df: pd.DataFrame = pd.read_csv(os.path.join('polished_data', f'scrape{i}.csv'))
-client = ApifyClient("apify_api_D3gp6G3sI5bzaxWDaQgI0fvCbHCvAg48QacH")
+    df = pd.read_csv(os.path.join('polished_data', f'scrape{i}.csv'))
+client = ApifyClient("apify_api_GDRKflR0PXFktqqbzYkP2MFHjJ02KJ12dQPn")
 
 for video in tqdm(df.sort_values('comments').itertuples(), total=df.shape[0]):
     if not os.path.isfile(os.path.join('comments', f'{video.id}.json')):
@@ -24,6 +24,7 @@ for video in tqdm(df.sort_values('comments').itertuples(), total=df.shape[0]):
         }
         run = client.actor(
             "clockworks/tiktok-comments-scraper").call(run_input=run_input)
-        with open(os.path.join('comments', f'{video.id}.json'), 'wb') as out_file:
-            out_file.write(client.dataset(
-                run["defaultDatasetId"]).get_items_as_bytes(item_format='json'))
+        if run is not None:
+            with open(os.path.join('comments', f'{video.id}.json'), 'wb') as out_file:
+                out_file.write(client.dataset(
+                    run["defaultDatasetId"]).get_items_as_bytes(item_format='json'))
