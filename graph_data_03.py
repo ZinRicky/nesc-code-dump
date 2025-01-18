@@ -20,7 +20,7 @@ def f(x):
 
 
 def main():
-    source_nodes: set = set()
+    source_nodes = set()
 
     print("Indexing source nodes.")
     for x in tqdm(edges.Source):
@@ -31,7 +31,7 @@ def main():
     with Pool() as p:
         relevant = p.imap_unordered(f, list(source_nodes))
 
-        good_source_nodes: set = set()
+        good_source_nodes = set()
 
         for x in tqdm(relevant, total=len(source_nodes)):
             if x[1]:

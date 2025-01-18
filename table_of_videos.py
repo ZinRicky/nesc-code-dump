@@ -18,32 +18,33 @@ for influencer in tqdm.tqdm(os.listdir('./profiles')):
         raw_data = json.load(fp)
     data: defaultdict[str, list] = defaultdict(list)
     for video in raw_data:
-        data['id'].append(video['id'])
-        data['author'].append(video['authorMeta']['name'])
-        data['nation'].append(video['authorMeta']['region'])
-        data['date'].append(video['createTime'])
+        if video['authorMeta']['region'] == 'US':
+            data['id'].append(video['id'])
+            data['author'].append(video['authorMeta']['name'])
+            data['nation'].append(video['authorMeta']['region'])
+            data['date'].append(video['createTime'])
 
-        data['views'].append(video['playCount'])
-        data['likes'].append(video['diggCount'])
-        data['comments'].append(video['commentCount'])
-        data['shares'].append(video['shareCount'])
+            data['views'].append(video['playCount'])
+            data['likes'].append(video['diggCount'])
+            data['comments'].append(video['commentCount'])
+            data['shares'].append(video['shareCount'])
 
-        data['url'].append(video['webVideoUrl'])
-        data['text'].append(video['text'])
+            data['url'].append(video['webVideoUrl'])
+            data['text'].append(video['text'])
 
-        if os.path.isfile(os.path.join('clean_transcripts', video['id'] + '.txt')):
-            with open(os.path.join('clean_transcripts', video['id'] + '.txt'), encoding='utf-8') as fp:
-                data['transcript'].append(fp.read())
-        else:
-            data['transcript'].append(pd.NA)
+            if os.path.isfile(os.path.join('clean_transcripts', video['id'] + '.txt')):
+                with open(os.path.join('clean_transcripts', video['id'] + '.txt'), encoding='utf-8') as fp:
+                    data['transcript'].append(fp.read())
+            else:
+                data['transcript'].append(pd.NA)
 
-        video_hashtags = {tag['name'] for tag in video['hashtags']}
-        for ht in hashtags:
-            data[f'hashtag_{ht}'].append(ht in video_hashtags)
+            video_hashtags = {tag['name'] for tag in video['hashtags']}
+            for ht in hashtags:
+                data[f'hashtag_{ht}'].append(ht in video_hashtags)
 
     if df is None:
         df = pd.DataFrame(data)
-    else:
+    elif data:
         df = pd.concat([df, pd.DataFrame(data)])
 
 if df is not None:
