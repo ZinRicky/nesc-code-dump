@@ -38,9 +38,7 @@ for influencer in tqdm.tqdm(os.listdir('./profiles')):
             else:
                 data['transcript'].append(pd.NA)
 
-            video_hashtags = {tag['name'] for tag in video['hashtags']}
-            for ht in hashtags:
-                data[f'hashtag_{ht}'].append(ht in video_hashtags)
+            data['hashtags'].append(list(set(tag['name'] for tag in video['hashtags'] if tag['name'] != '')))
 
     if df is None:
         df = pd.DataFrame(data)
