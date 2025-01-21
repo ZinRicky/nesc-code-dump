@@ -5,18 +5,12 @@ import json
 import csv
 from collections import defaultdict
 
-df: None | pd.DataFrame = None
-hashtags: list[str] = []
-
-# with open(os.path.join('polished_data', 'hashtags_from_influencers.csv'), encoding='utf-8', newline='') as fp:
-#     hashtag_file = csv.reader(fp)
-#     for hashtag in hashtag_file:
-#         hashtags.append(hashtag[0])
-
 for influencer in tqdm.tqdm(os.listdir('./profiles')):
     with open(os.path.join('profiles', influencer), encoding='utf-8') as fp:
         raw_data = json.load(fp)
+
     data: defaultdict[str, list] = defaultdict(list)
+
     for video in raw_data:
         if video['authorMeta']['region'] == 'US':
             data['id'].append(video['id'])
@@ -38,13 +32,11 @@ for influencer in tqdm.tqdm(os.listdir('./profiles')):
             else:
                 data['transcript'].append(pd.NA)
 
-            data['hashtags'].append(list(set(tag['name'] for tag in video['hashtags'] if tag['name'] != '')))
+            data['hashtags'].append(
+                list(set(tag['name'] for tag in video['hashtags'] if tag['name'] != '')))
 
-    if df is None:
-        df = pd.DataFrame(data)
-    elif data:
-        df = pd.concat([df, pd.DataFrame(data)])
+    df = pd.DataFrame(data)
 
-if df is not None:
-    df.to_csv(os.path.join('polished_data', 'videos_from_influencers.csv'),
-              index=False, quoting=csv.QUOTE_NONNUMERIC)
+    if df.shape[0] > 0:
+        df.to_csv(os.path.join('video_data', f'{influencer.removesuffix('.json')}_videos.csv'),
+                index=False, quoting=csv.QUOTE_NONNUMERIC)
