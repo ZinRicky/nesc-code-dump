@@ -13,7 +13,7 @@ if i is None:
     df: pd.DataFrame = pd.read_csv(os.path.join('polished_data', f'videos_from_influencers.csv'))
 else:
     df = pd.read_csv(os.path.join('polished_data', f'scrape{i}.csv'))
-client = ApifyClient("apify_api_hYQF6gKeXsuj5h2WKZ5ZCAO0Q7bqoD2oKZ4T")
+client = ApifyClient("apify_api_WU3XlpRS3a0Pl0vhsmpNHlDhczbWAV1dyfnv")
 
 for video in tqdm(df.sort_values('comments').itertuples(), total=df.shape[0]):
     if not os.path.isfile(os.path.join('comments', f'{video.id}.json')):
