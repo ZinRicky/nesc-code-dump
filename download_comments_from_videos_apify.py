@@ -13,9 +13,9 @@ if i is None:
     df: pd.DataFrame = pd.read_csv(os.path.join('polished_data', f'videos_from_influencers.csv'))
 else:
     df = pd.read_csv(os.path.join('polished_data', f'scrape{i}.csv'))
-client = ApifyClient("apify_api_WU3XlpRS3a0Pl0vhsmpNHlDhczbWAV1dyfnv")
+client = ApifyClient("apify_api_X1ShcCt5DfkbqhhtuyxQ3aFIrRLud12NyiZo")
 
-for video in tqdm(df.sort_values('comments').itertuples(), total=df.shape[0]):
+for video in tqdm(df.sort_values(by=['comments', 'id']).itertuples(), total=df.shape[0]):
     if not os.path.isfile(os.path.join('comments', f'{video.id}.json')):
         run_input = {
             'postURLs': [video.url],
