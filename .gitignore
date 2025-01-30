@@ -1,5 +1,6 @@
 polished_data/*
 video_data/*
+hand_picked/*
 !polished_data/.gitkeep
 
 # Byte-compiled / optimized / DLL files

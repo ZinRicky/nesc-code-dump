@@ -16,7 +16,7 @@ for video in tqdm(relevant_videos, total=relevant_videos.shape[0]):
 
         for comment in raw_data:
             if "cid" in comment and "uniqueId" in comment and "createTime" in comment:
-                data["id"].append(comment["cid"])
+                data["id"].append(int(comment["cid"]))
                 data["video_id"].append(video)
                 data["author"].append(comment["uniqueId"])
                 data["date"].append(comment["createTime"])
