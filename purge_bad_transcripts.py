@@ -8,15 +8,15 @@ to_be_deleted: list[str] = []
 
 i = 0
 
-for transcript in os.listdir('./transcripts'):
-    with open(os.path.join('transcripts', transcript), encoding='utf-8') as fp:
+for transcript in os.listdir("./transcripts"):
+    with open(os.path.join("transcripts", transcript), encoding="utf-8") as fp:
         # This is a bad hack, but it should work.
         aaa = fp.readlines()[0]
-        if '<HTML><HEAD>' in aaa or '<html>' in aaa:
+        if "<HTML><HEAD>" in aaa or "<html>" in aaa:
             to_be_deleted.append(transcript)
             i += 1
 
 for bad_transcript in to_be_deleted:
-    os.remove(os.path.join('transcripts', bad_transcript))
+    os.remove(os.path.join("transcripts", bad_transcript))
 
-print(f'{i} transcripts were faulty.')
+print(f"{i} transcripts were faulty.")

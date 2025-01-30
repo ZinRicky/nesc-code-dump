@@ -8,12 +8,17 @@ from multiprocessing import Pool
 
 
 def not_npc(x: str, table, influencers):
-    return x, False if set(table.loc[table.Source == x, 'Target']) <= influencers and table.loc[table.Target == x].empty else True
+    return x, (
+        False
+        if set(table.loc[table.Source == x, "Target"]) <= influencers
+        and table.loc[table.Target == x].empty
+        else True
+    )
 
 
-edges = pd.read_csv(os.path.join('polished_data', 'comment_graph.csv'))
-influencers = set(pd.read_csv(os.path.join(
-    'polished_data', 'influencers.csv')).Name)
+edges = pd.read_csv(os.path.join("polished_data", "comment_graph.csv"))
+influencers = set(pd.read_csv(os.path.join("polished_data", "influencers.csv")).Name)
+
 
 def f(x):
     return not_npc(x, edges, influencers)
@@ -38,8 +43,9 @@ def main():
                 good_source_nodes.add(x[0])
 
     edges.loc[edges.Source.apply(lambda x: x in good_source_nodes)].to_csv(
-        os.path.join('polished_data', 'clean_comment_graph.csv'), index=False)
+        os.path.join("polished_data", "clean_comment_graph.csv"), index=False
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

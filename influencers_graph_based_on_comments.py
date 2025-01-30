@@ -7,9 +7,8 @@ from collections import defaultdict
 
 # original_adjacency_matrix = spsp.load_npz(os.path.join(
 #     'polished_data', 'comment_adjacency_matrix.npz'))
-edges = pd.read_csv(os.path.join('polished_data', 'comment_graph.csv'))
-influencers = set(pd.read_csv(os.path.join(
-    'polished_data', 'influencers.csv')).Name)
+edges = pd.read_csv(os.path.join("polished_data", "comment_graph.csv"))
+influencers = set(pd.read_csv(os.path.join("polished_data", "influencers.csv")).Name)
 
 data: defaultdict[tuple[str, str], int] = defaultdict(int)
 
@@ -27,12 +26,17 @@ for source in tqdm(set(df.Source), total=df.shape[0]):
 final_data = []
 influencers_L = list(influencers)
 
-for i,x in tqdm(enumerate(influencers_L), total=len(influencers_L)):
+for i, x in tqdm(enumerate(influencers_L), total=len(influencers_L)):
     for y in influencers_L[i:]:
         if data[(x, y)]:
             final_data.append((x, y, data[(x, y)]))
 
-with open(os.path.join('polished_data', 'raw_influencer_graph.csv'), 'w', encoding='utf-8', newline='') as fp:
+with open(
+    os.path.join("polished_data", "raw_influencer_graph.csv"),
+    "w",
+    encoding="utf-8",
+    newline="",
+) as fp:
     file_writer = csv.writer(fp, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
     file_writer.writerow(["Source", "Target", "Weight"])
     for x in tqdm(final_data):

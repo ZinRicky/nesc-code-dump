@@ -24,11 +24,12 @@ tol = 1e-10
 # spsp.save_npz(os.path.join('polished_data',
 #               'comment_adjacency_matrix.npz'), adjacency_matrix)
 
-adjacency_matrix = spsp.load_npz(os.path.join('polished_data', 'influencer_adjacency_matrix_via_comments.npz'))
+adjacency_matrix = spsp.load_npz(
+    os.path.join("polished_data", "influencer_adjacency_matrix_via_comments.npz")
+)
 
 M = damping * adjacency_matrix
-q = (1 - damping) * \
-    np.ones((adjacency_matrix.shape[0],)) / adjacency_matrix.shape[0]
+q = (1 - damping) * np.ones((adjacency_matrix.shape[0],)) / adjacency_matrix.shape[0]
 
 # print(f'{q=}')
 
@@ -39,14 +40,26 @@ page_rank_vector /= np.linalg.norm(page_rank_vector, ord=1)
 page_rank_old = page_rank_vector.copy()
 enter_in_cycle = False
 
-while np.linalg.norm(page_rank_vector - page_rank_old, ord=1) > tol or not enter_in_cycle:
+while (
+    np.linalg.norm(page_rank_vector - page_rank_old, ord=1) > tol or not enter_in_cycle
+):
     enter_in_cycle = True
     page_rank_old = page_rank_vector.copy()
     page_rank_vector = M @ page_rank_vector + q
     page_rank_vector /= np.linalg.norm(page_rank_vector, ord=1)
-    print(f'{np.linalg.norm(page_rank_vector - page_rank_old, ord=1)=}')
+    print(f"{np.linalg.norm(page_rank_vector - page_rank_old, ord=1)=}")
 
-influencer_positions = pd.read_csv(os.path.join('polished_data', 'influencer_positions.csv'))
+influencer_positions = pd.read_csv(
+    os.path.join("polished_data", "influencer_positions.csv")
+)
 
-pd.DataFrame({'Name': influencer_positions.Name, 'PageRank': page_rank_vector[influencer_positions.Position]}).to_csv(os.path.join(
-    'polished_data', 'influencer_page_rank.csv'), index=False, quoting=csv.QUOTE_NONNUMERIC)
+pd.DataFrame(
+    {
+        "Name": influencer_positions.Name,
+        "PageRank": page_rank_vector[influencer_positions.Position],
+    }
+).to_csv(
+    os.path.join("polished_data", "influencer_page_rank.csv"),
+    index=False,
+    quoting=csv.QUOTE_NONNUMERIC,
+)
