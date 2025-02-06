@@ -26,7 +26,9 @@ for video in tqdm(relevant_videos, total=relevant_videos.shape[0]):
                     if comment["replyCommentTotal"]
                     else 0
                 )
-                data["reply_of"].append(comment["repliesToId"])
+                data["reply_of"].append(
+                    int(comment["repliesToId"]) if comment["repliesToId"] else pd.NA
+                )
                 data["text"].append(comment["text"])
 
 df = pd.DataFrame(data)
