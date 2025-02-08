@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-page_rank = pd.read_csv("polished_data/full_page_rank.csv")
+page_rank = pd.read_csv("polished_data/people_page_rank.csv")
 influencers = pd.read_csv("polished_data/influencers.csv")
 
 df = influencers.merge(page_rank, left_on="Name", right_on="id")
@@ -24,6 +24,6 @@ fig1, ax = plt.subplots()
 )
 ax.set_xlabel("# followers")
 ax.set_ylabel("PageRank score")
-ax.set_title("Followers vs PageRank — full graph")
+ax.set_title("Followers vs PageRank — people graph")
 ax.legend(handles=[f1, f2])
 plt.show()

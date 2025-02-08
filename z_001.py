@@ -3,9 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-df = pd.read_csv("polished_data/full_page_rank.csv")
+df = pd.read_csv("polished_data/full_hub_page_rank.csv")
 
-df_head = df.loc[:100_000]
+df_head = df.loc[50:100_000]
 
 lr = linregress(
     np.log(df_head.index.to_numpy() + 1), np.log(df_head.PageRank.to_numpy())

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-df = pd.read_csv("polished_data/full_edges_list.csv")
+df = pd.read_csv("polished_data/hashtags_edges_list_undirected.csv")
 raw_nodes: set = set()
 
 print("Indexing source nodes.")

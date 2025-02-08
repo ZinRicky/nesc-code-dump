@@ -28,25 +28,26 @@ def default_list():
 degrees: defaultdict[str, list] = defaultdict(default_list)
 
 for edge in tqdm(df.itertuples(), total=df.shape[0]):
-    degrees[edge.Source][0] += 1
-    degrees[edge.Source][2] += 1
+    degrees[edge.Source][1] += 1
     degrees[edge.Target][0] += 1
-    degrees[edge.Target][1] += 1
-
-correct_degree = []
-
-for name in tqdm(names):
-    if name in people_names:
-        correct_degree.append(degrees[name][0] / 2)
+    if (
+        edge.Source in people_names
+        or edge.Target in people_names
+        or "hashtag_" in edge.Source
+        or "hashtag_" in edge.Target
+    ):
+        degrees[edge.Source][2] += 0.5
+        degrees[edge.Target][2] += 0.5
     else:
-        correct_degree.append(degrees[name][0])
+        degrees[edge.Source][2] += 1
+        degrees[edge.Target][2] += 1
 
 pd.DataFrame(
     {
         "Name": names,
-        "Undirected degree": correct_degree,
-        "In-degree": [degrees[name][1] for name in names],
-        "Out-degree": [degrees[name][2] for name in names],
+        "Undirected degree": [int(degrees[name][2]) for name in names],
+        "In-degree": [degrees[name][0] for name in names],
+        "Out-degree": [degrees[name][1] for name in names],
     }
 ).sort_values(by="Undirected degree", ascending=False).to_csv(
     os.path.join("polished_data", "full_degrees.csv"),

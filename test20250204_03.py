@@ -4,7 +4,7 @@ from tqdm import tqdm
 import scipy.sparse as spsp
 import os
 
-edges = pd.read_csv("polished_data/complete_graph.csv")
+edges = pd.read_csv("polished_data/full_edges_list.csv")
 raw_nodes: set = set()
 
 # print(edges.head())

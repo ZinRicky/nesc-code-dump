@@ -1,35 +1,14 @@
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 import scipy.sparse as spsp
 import os
-import re
-from collections import defaultdict
-from tqdm import tqdm
-import csv
 
-raw_nodes: set = set()
-edges = pd.read_csv(os.path.join("polished_data", "people_edges_list.csv"))
+edges = pd.read_csv("polished_data/hashtags_edges_list_undirected.csv")
 
-print("Indexing source nodes.")
-for x in tqdm(edges.Source):
-    raw_nodes.add(x)
-
-print("Indexing target nodes.")
-for x in tqdm(edges.Target):
-    raw_nodes.add(x)
-
-nodes: list = list(raw_nodes)
+nodes = pd.read_csv("polished_data/hashtags_from_influencers.csv").Hashtag.tolist()
 nodes_number = len(nodes)
 nodes_dict: dict[str, int] = {x: i for i, x in enumerate(nodes)}
-
-pd.DataFrame({"Name": nodes}).to_csv(
-    os.path.join("polished_data", "people_nodes.csv"), index=False
-)
-
-
-# print(f'{nodes_number=}')
-# unnormalised_adjacency_matrix = spsp.coo_array(
-#     (nodes_number, nodes_number), dtype=np.float32)
 
 weights = []
 row_indices = []
@@ -48,6 +27,10 @@ for edge in tqdm(edges.itertuples(), total=edges.shape[0]):
     row_indices.append(i)
     column_indices.append(j)
 
+    weights.append(w)
+    row_indices.append(j)
+    column_indices.append(i)
+
 unnormalised_adjacency_matrix = spsp.coo_array(
     (weights, (row_indices, column_indices)),
     shape=(nodes_number, nodes_number),
@@ -59,5 +42,5 @@ adjacency_matrix = unnormalised_adjacency_matrix / np.maximum(
 )
 
 spsp.save_npz(
-    os.path.join("polished_data", "people_adjacency_matrix.npz"), adjacency_matrix
+    os.path.join("polished_data", "hashtags_adjacency_matrix.npz"), adjacency_matrix
 )

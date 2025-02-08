@@ -4,7 +4,7 @@ import numpy as np
 import os
 import csv
 
-degrees = pd.read_csv(os.path.join("polished_data", "full_degrees.csv"))
+degrees = pd.read_csv(os.path.join("polished_data", "people_degrees.csv"))
 
 # fig1, ax = plt.subplots()
 # # plt.hist(degrees["Undirected degree"], bins=100, log=True, color="#5e82b6")
@@ -20,7 +20,7 @@ degrees = pd.read_csv(os.path.join("polished_data", "full_degrees.csv"))
 x, counts = np.unique(degrees["Out-degree"].to_numpy(), return_counts=True)
 
 frequencies = counts / degrees.shape[0]
-kmin = 10
+kmin = 5
 # kmax = np.inf
 gamma = 1 + 1 / np.mean(
     np.log(
@@ -34,23 +34,23 @@ gamma = 1 + 1 / np.mean(
 
 # C = (gamma - 1) * kmin ** (1 - gamma)
 # gamma = 2.5
-C = 0.3
+# C = 0.3
+C = 0.8
 
 print(f"{gamma=}")
 print(f"{C=}")
 
 fig1, ax = plt.subplots()
 (f2,) = ax.loglog(
-    [1, 201],
-    [C * k ** (-gamma) for k in [1, 200]],
+    range(1, 201),
+    [C * k ** (-gamma) for k in range(1, 201)],
     color="#101010",
     ls="--",
     label=f"Power law ($\\gamma = {gamma:.3f}$)",
 )
-(f1,) = ax.loglog(x[x != 0], frequencies[x != 0], "o", color="#8fb132", label="Data")
-# ax.set_ylim(top=0.1)
+(f1,) = ax.loglog(x, frequencies, "o", color="#8fb132", label="Data")
 ax.legend(handles=[f1, f2])
-ax.set_xlabel("Degree $k$")
-ax.set_ylabel("$p_k$")
-ax.set_ylim(bottom=5e-7)
+ax.set_xlabel("Out-degree $k_{\\text{out}}$")
+ax.set_ylabel("$p_{k_{\\text{out}}}$")
+ax.set_ylim(bottom=1e-6)
 plt.show()

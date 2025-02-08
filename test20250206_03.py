@@ -9,7 +9,7 @@ damping = 0.85
 tol = 1e-10
 
 adjacency_matrix = spsp.load_npz(
-    os.path.join("polished_data", "people_adjacency_matrix.npz")
+    os.path.join("polished_data", "full_transpose_adjacency_matrix.npz")
 )
 
 M = damping * adjacency_matrix
@@ -33,14 +33,17 @@ while (
 
 # np.save(os.path.join("polished_data", "page_rank_vector.npy"), page_rank_vector)
 
-names = pd.read_csv(os.path.join("polished_data", "people_nodes.csv")).Name.tolist()
+with open(os.path.join("polished_data", "full_nodes.txt"), encoding="utf-8") as fp:
+    names = []
+    for name in fp.readlines():
+        names.append(name.replace("\n", ""))
 
 # print(names)
 
 pd.DataFrame({"id": names, "PageRank": page_rank_vector}).sort_values(
     by="PageRank", ascending=False
-).sort_values(by="PageRank", ascending=False).to_csv(
-    os.path.join("polished_data", "people_page_rank.csv"),
+).to_csv(
+    os.path.join("polished_data", "full_hub_page_rank.csv"),
     index=False,
     quoting=csv.QUOTE_NONNUMERIC,
 )

@@ -7,7 +7,7 @@ from collections import defaultdict
 
 # original_adjacency_matrix = spsp.load_npz(os.path.join(
 #     'polished_data', 'comment_adjacency_matrix.npz'))
-edges = pd.read_csv(os.path.join("polished_data", "comment_graph.csv"))
+edges = pd.read_csv(os.path.join("polished_data", "people_edges_list.csv"))
 influencers = set(pd.read_csv(os.path.join("polished_data", "influencers.csv")).Name)
 
 data: defaultdict[tuple[str, str], int] = defaultdict(int)
@@ -32,7 +32,7 @@ for i, x in tqdm(enumerate(influencers_L), total=len(influencers_L)):
             final_data.append((x, y, data[(x, y)]))
 
 with open(
-    os.path.join("polished_data", "raw_influencer_graph.csv"),
+    os.path.join("polished_data", "influencer_edges_list_undirected.csv"),
     "w",
     encoding="utf-8",
     newline="",

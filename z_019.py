@@ -9,7 +9,7 @@ damping = 0.85
 tol = 1e-10
 
 adjacency_matrix = spsp.load_npz(
-    os.path.join("polished_data", "people_adjacency_matrix.npz")
+    os.path.join("polished_data", "hashtags_adjacency_matrix.npz")
 )
 
 M = damping * adjacency_matrix
@@ -33,14 +33,14 @@ while (
 
 # np.save(os.path.join("polished_data", "page_rank_vector.npy"), page_rank_vector)
 
-names = pd.read_csv(os.path.join("polished_data", "people_nodes.csv")).Name.tolist()
+names = pd.read_csv("polished_data/hashtags_from_influencers.csv").Hashtag.tolist()
 
 # print(names)
 
 pd.DataFrame({"id": names, "PageRank": page_rank_vector}).sort_values(
     by="PageRank", ascending=False
-).sort_values(by="PageRank", ascending=False).to_csv(
-    os.path.join("polished_data", "people_page_rank.csv"),
+).to_csv(
+    os.path.join("polished_data", "hashtags_page_rank.csv"),
     index=False,
     quoting=csv.QUOTE_NONNUMERIC,
 )

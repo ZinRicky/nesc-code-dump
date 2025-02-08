@@ -7,6 +7,17 @@ from collections import defaultdict
 from tqdm import tqdm
 import csv
 
+# Esportazione di tutte le possibili proiezioni di grafo mancanti
+
+# Già fatte altrove:
+# - Grafo con tutto
+# - Grafo con solo persone
+
+# Da fare:
+# - Grafo con solo contenuti e hashtag
+# - Grafo con solo contenuti
+# - Grafo delle influencer
+
 comments = pd.read_csv(
     os.path.join("polished_data", "comments_from_videos.csv"),
     dtype={
@@ -32,40 +43,23 @@ hashtags = pd.read_csv(
 data: defaultdict[tuple, int] = defaultdict(int)
 
 for comment in tqdm(comments.itertuples(), total=comments.shape[0]):
-    # Comments and replies
-    if not pd.isna(comment.reply_of):
-        try:
-            data[(comment.id, comment.reply_of)] += 1
-        except:
-            pass
-    else:
-        data[(comment.id, comment.video_id)] += 1
-
-    # Authors of the comments
-    data[(comment.author, comment.id)] += 1
-    data[(comment.id, comment.author)] += 1
-
-    # Data for hashtags
     ht_regex = r"#(\w+)"
     if isinstance(comment.text, str):
-        ht_list = re.findall(ht_regex, comment.text)
-        for ht in ht_list:
-            if ht in hashtags.ht.array:
-                data[(comment.id, f"hashtag_{ht}")] += 1
-                data[(f"hashtag_{ht}", comment.id)] += 1
+        comment_hashtags = re.findall(ht_regex, comment.text)
+        ht_list = [x for x in comment_hashtags if x in hashtags.ht.array]
+        for i, ht1 in enumerate(sorted(ht_list)):
+            for ht2 in sorted(ht_list)[i + 1 :]:
+                data[(ht1, ht2)] += 1
 
 for video in tqdm(videos.itertuples(), total=videos.shape[0]):
-    for ht in video.hashtags:
-        if ht in hashtags.ht.array:
-            data[(video.id, f"hashtag_{ht}")] += 1
-            data[(f"hashtag_{ht}", video.id)] += 1
-
-    data[(video.id, video.author)] += 1
-    data[(video.author, video.id)] += 1
-
+    video_hashtags = [x for x in video.hashtags if x in hashtags.ht.array]
+    video_hashtags.sort()
+    for i, ht1 in enumerate(video_hashtags):
+        for ht2 in video_hashtags[i + 1 :]:
+            data[(ht1, ht2)] += 1
 
 with open(
-    os.path.join("polished_data", "full_edges_list.csv"),
+    os.path.join("polished_data", "hashtag_edges_list_undirected.csv"),
     "w",
     encoding="utf-8",
     newline="",

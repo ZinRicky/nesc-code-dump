@@ -1,14 +1,13 @@
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 import scipy.sparse as spsp
 import os
-import re
-from collections import defaultdict
-from tqdm import tqdm
-import csv
 
+edges = pd.read_csv("polished_data/full_edges_list.csv")
 raw_nodes: set = set()
-edges = pd.read_csv(os.path.join("polished_data", "people_edges_list.csv"))
+
+# print(edges.head())
 
 print("Indexing source nodes.")
 for x in tqdm(edges.Source):
@@ -22,9 +21,9 @@ nodes: list = list(raw_nodes)
 nodes_number = len(nodes)
 nodes_dict: dict[str, int] = {x: i for i, x in enumerate(nodes)}
 
-pd.DataFrame({"Name": nodes}).to_csv(
-    os.path.join("polished_data", "people_nodes.csv"), index=False
-)
+with open(os.path.join("polished_data", "full_nodes.txt"), "w", encoding="utf-8") as fp:
+    for node in nodes:
+        fp.write(node + "\n")
 
 
 # print(f'{nodes_number=}')
@@ -45,8 +44,8 @@ for edge in tqdm(edges.itertuples(), total=edges.shape[0]):
     i = nodes_dict[x2]
 
     weights.append(w)
-    row_indices.append(i)
-    column_indices.append(j)
+    row_indices.append(j)
+    column_indices.append(i)
 
 unnormalised_adjacency_matrix = spsp.coo_array(
     (weights, (row_indices, column_indices)),
@@ -59,5 +58,6 @@ adjacency_matrix = unnormalised_adjacency_matrix / np.maximum(
 )
 
 spsp.save_npz(
-    os.path.join("polished_data", "people_adjacency_matrix.npz"), adjacency_matrix
+    os.path.join("polished_data", "full_transpose_adjacency_matrix.npz"),
+    adjacency_matrix,
 )
